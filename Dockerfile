@@ -1,9 +1,17 @@
-FROM cryptobughunters/rust:2.1.0 AS reth-builder
-WORKDIR /opt/reth
+FROM cryptobughunters/rust:main AS rust-builder
+
+FROM rust-builder AS reth-builder
 ARG RETH_VERSION=v1.0.5
-RUN git clone -b ${RETH_VERSION} https://github.com/paradigmxyz/reth .
-RUN cargo build --target ${CARGO_TARGET} --release --bin reth
-RUN mv target/${CARGO_TARGET}/release/reth /root/reth
+WORKDIR /opt/build
+RUN <<EOF
+set -eu
+git clone -b ${RETH_VERSION} https://github.com/paradigmxyz/reth
+cd reth
+cargo build --target ${CARGO_TARGET} --release --bin reth
+mv target/${CARGO_TARGET}/release/reth /root/reth
+cd ..
+rm -rf reth
+EOF
 
 FROM ubuntu:noble-20240801 AS bundler
 WORKDIR /opt/bundle
