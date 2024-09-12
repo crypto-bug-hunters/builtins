@@ -20,6 +20,13 @@ RUN apt-get install -y --no-install-recommends \
 
 ###############################################################################
 
+FROM c-builder AS cpp-builder
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y --no-install-recommends \
+    g++-riscv64-linux-gnu
+
+###############################################################################
+
 FROM c-builder AS lua-builder
 COPY lua/Makefile .
 
@@ -54,6 +61,16 @@ RUN make VERSION=3.43.2
 
 ###############################################################################
 
+FROM cpp-builder AS solc-builder
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y --no-install-recommends cmake
+COPY solc/Makefile .
+
+FROM solc-builder AS solc-0.8.27-builder
+RUN make -j2 VERSION=0.8.27
+
+###############################################################################
+
 FROM cryptobughunters/rust:main AS rust-builder
 WORKDIR /opt/build
 
@@ -74,6 +91,7 @@ COPY --from=lua-5.4.7-builder --chmod=755 /opt/build/lua-5.4.7 .
 COPY --from=busybox-1.36.1-builder --chmod=755 /opt/build/busybox-1.36.1 .
 COPY --from=sqlite-3.32.2-builder --chmod=755 /opt/build/sqlite-3.32.2 .
 COPY --from=sqlite-3.43.2-builder --chmod=755 /opt/build/sqlite-3.43.2 .
+COPY --from=solc-0.8.27-builder --chmod=755 /opt/build/solc-0.8.27 .
 COPY --from=reth-1.0.5-builder --chmod=755 /opt/build/reth-1.0.5 .
 RUN tar --sort=name \
     --mtime=@0 \
