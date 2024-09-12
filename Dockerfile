@@ -34,7 +34,6 @@ RUN make VERSION=5.4.7
 ###############################################################################
 
 FROM c-builder AS busybox-builder
-ARG DEBIAN_FRONTEND=noninteractive
 COPY busybox/* .
 
 FROM busybox-builder AS busybox-1.36.1-builder
