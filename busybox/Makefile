@@ -5,7 +5,6 @@ BIN=$(SRC_DIR)/busybox
 
 ARCH=riscv
 CROSS_COMPILE=riscv64-linux-gnu-
-CCLINK=/usr/bin/riscv64-linux-gnu-gcc
 CONFIG_FILE=$(SRC_DIR)/.config
 
 CFLAGS=-O1 -ftrivial-auto-var-init=pattern -D_FORTIFY_SOURCE=2 -fexceptions -fPIE -fstack-clash-protection -fstack-protector-strong -ffunction-sections -fdata-sections
@@ -15,12 +14,9 @@ busybox-$(VERSION): $(BIN)
 	mv $< $@
 	rm -rf $(DEST_DIR) $(SRC_TAR)
 
-$(BIN): $(SRC_DIR) $(CCLINK) $(CONFIG_FILE)
+$(BIN): $(SRC_DIR) $(CONFIG_FILE)
 	cd $(SRC_DIR) && patch -Np1 ../filter_exit.patch
 	make -j $(shell nproc) -C $< "ARCH=$(ARCH)" "CROSS_COMPILE=$(CROSS_COMPILE)" "CFLAGS=$(CFLAGS)" "LDFLAGS=$(LDFLAGS)" busybox
-
-$(CCLINK): $(CCLINK)-12
-	ln -s $< $@
 
 $(CONFIG_FILE): config
 	mv $< $@
