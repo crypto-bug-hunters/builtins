@@ -14,8 +14,8 @@ FROM base-builder AS c-builder
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y --no-install-recommends \
     build-essential \
-    gcc-12-riscv64-linux-gnu \
-    libc6-dev-riscv64-cross \
+    gcc-riscv64-linux-gnu \
+    libc-dev-riscv64-cross \
     wget
 
 ###############################################################################
