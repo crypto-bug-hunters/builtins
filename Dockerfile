@@ -18,6 +18,7 @@ RUN apt-get install -y --no-install-recommends \
     gcc-12-riscv64-linux-gnu \
     libc6-dev-riscv64-cross \
     patch \
+    tcl \
     wget
 
 ###############################################################################
@@ -41,6 +42,17 @@ RUN make VERSION=1.36.1
 
 ###############################################################################
 
+FROM c-builder AS sqlite-builder
+COPY sqlite/* .
+
+FROM sqlite-builder AS sqlite-3.32.2-builder
+RUN make VERSION=3.32.2
+
+FROM sqlite-builder AS sqlite-3.43.2-builder
+RUN make VERSION=3.43.2
+
+###############################################################################
+
 FROM cryptobughunters/rust:main AS rust-builder
 WORKDIR /opt/build
 
@@ -59,6 +71,8 @@ WORKDIR /opt/bundle
 COPY --from=lua-5.4.3-builder --chmod=755 /opt/build/lua-5.4.3 .
 COPY --from=lua-5.4.7-builder --chmod=755 /opt/build/lua-5.4.7 .
 COPY --from=busybox-1.36.1-builder --chmod=755 /opt/build/busybox-1.36.1 .
+COPY --from=sqlite-3.32.2-builder --chmod=755 /opt/build/sqlite-3.32.2 .
+COPY --from=sqlite-3.43.2-builder --chmod=755 /opt/build/sqlite-3.43.2 .
 COPY --from=reth-1.0.5-builder --chmod=755 /opt/build/reth-1.0.5 .
 RUN tar --sort=name \
     --mtime=@0 \
