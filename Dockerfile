@@ -17,6 +17,7 @@ RUN apt-get install -y --no-install-recommends \
     bzip2 \
     gcc-12-riscv64-linux-gnu \
     libc6-dev-riscv64-cross \
+    patch \
     wget
 
 ###############################################################################
@@ -34,7 +35,6 @@ RUN make VERSION=5.4.7
 
 FROM c-builder AS busybox-builder
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get install -y --no-install-recommends bzip2 patch
 COPY busybox/* .
 
 FROM busybox-builder AS busybox-1.36.1-builder
