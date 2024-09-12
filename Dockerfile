@@ -14,11 +14,8 @@ FROM base-builder AS c-builder
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y --no-install-recommends \
     build-essential \
-    bzip2 \
     gcc-12-riscv64-linux-gnu \
     libc6-dev-riscv64-cross \
-    patch \
-    tcl \
     wget
 
 ###############################################################################
@@ -35,6 +32,8 @@ RUN make VERSION=5.4.7
 ###############################################################################
 
 FROM c-builder AS busybox-builder
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y --no-install-recommends bzip2 patch
 COPY busybox/* .
 
 FROM busybox-builder AS busybox-1.36.1-builder
@@ -43,6 +42,8 @@ RUN make VERSION=1.36.1
 ###############################################################################
 
 FROM c-builder AS sqlite-builder
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y --no-install-recommends tcl
 COPY sqlite/* .
 
 FROM sqlite-builder AS sqlite-3.32.2-builder
