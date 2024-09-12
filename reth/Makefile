@@ -1,13 +1,13 @@
-CLONE_DIR=reth-clone
-CLONE_REF=v$(VERSION)
-BUILT_BIN=$(CLONE_DIR)/target/$(CARGO_TARGET)/release/reth
+SRC_DIR=reth-clone
+REF=v$(VERSION)
+BIN=$(SRC_DIR)/target/$(CARGO_TARGET)/release/reth
 
-reth-$(VERSION): $(BUILT_BIN)
+reth-$(VERSION): $(BIN)
 	mv $< $@
-	rm -rf $(BUILD_DIR)
+	rm -rf $(SRC_DIR)
 
-$(BUILT_BIN): $(CLONE_DIR)
-	cargo build --manifest-path $(CLONE_DIR)/Cargo.toml --target $(CARGO_TARGET) --release --bin reth
+$(BIN): $(SRC_DIR)
+	cargo build --manifest-path $(SRC_DIR)/Cargo.toml --target $(CARGO_TARGET) --release --bin reth
 
-$(CLONE_DIR):
-	git clone -b $(CLONE_REF) https://github.com/paradigmxyz/reth $@
+$(SRC_DIR):
+	git clone -b $(REF) https://github.com/paradigmxyz/reth $@

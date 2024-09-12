@@ -13,10 +13,11 @@ EOF
 FROM base-builder AS c-builder
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y --no-install-recommends \
-    curl \
+    build-essential \
+    bzip2 \
     gcc-12-riscv64-linux-gnu \
     libc6-dev-riscv64-cross \
-    make
+    wget
 
 ###############################################################################
 
@@ -28,6 +29,16 @@ RUN make VERSION=5.4.3
 
 FROM lua-builder AS lua-5.4.7-builder
 RUN make VERSION=5.4.7
+
+###############################################################################
+
+FROM c-builder AS busybox-builder
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y --no-install-recommends bzip2 patch
+COPY busybox/* .
+
+FROM busybox-builder AS busybox-1.36.1-builder
+RUN make VERSION=1.36.1
 
 ###############################################################################
 
@@ -48,6 +59,7 @@ FROM ubuntu:noble-20240801 AS bundler
 WORKDIR /opt/bundle
 COPY --from=lua-5.4.3-builder --chmod=755 /opt/build/lua-5.4.3 .
 COPY --from=lua-5.4.7-builder --chmod=755 /opt/build/lua-5.4.7 .
+COPY --from=busybox-1.36.1-builder --chmod=755 /opt/build/busybox-1.36.1 .
 COPY --from=reth-1.0.5-builder --chmod=755 /opt/build/reth-1.0.5 .
 RUN tar --sort=name \
     --mtime=@0 \

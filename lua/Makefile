@@ -1,7 +1,7 @@
 SRC_TAR=lua-$(VERSION).tar.gz
 DEST_DIR=build
 SRC_DIR=$(DEST_DIR)/lua-$(VERSION)
-LUA_BIN=$(SRC_DIR)/src/lua
+BIN=$(SRC_DIR)/src/lua
 
 CC=riscv64-linux-gnu-gcc-12
 AR=riscv64-linux-gnu-ar rc
@@ -9,11 +9,11 @@ RANLIB=riscv64-linux-gnu-ranlib
 MYCFLAGS=-O1 -ftrivial-auto-var-init=pattern -D_FORTIFY_SOURCE=2 -fexceptions -fPIE -fstack-clash-protection -fstack-protector-strong -ffunction-sections -fdata-sections
 MYLDFLAGS=-pie -Wl,-z,now,-z,relro,--gc-sections -s
 
-lua-$(VERSION): $(LUA_BIN)
+lua-$(VERSION): $(BIN)
 	mv $< $@
-	rm -rf $(SRC_DIR) $(SRC_TAR)
+	rm -rf $(DEST_DIR) $(SRC_TAR)
 
-$(LUA_BIN): $(SRC_DIR)
+$(BIN): $(SRC_DIR)
 	make -j $(shell nproc) -C $< "CC=$(CC)" "AR=$(AR)" "RANLIB=$(RANLIB)" "MYCFLAGS=$(MYCFLAGS)" "MYLDFLAGS=$(MYLDFLAGS)" linux
 
 $(SRC_DIR): $(SRC_TAR)
@@ -21,4 +21,4 @@ $(SRC_DIR): $(SRC_TAR)
 	tar xf $< -C $(DEST_DIR)
 
 $(SRC_TAR):
-	curl -L -R -O https://www.lua.org/ftp/$@
+	wget https://www.lua.org/ftp/$@
