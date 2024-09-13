@@ -12,7 +12,7 @@ busybox-$(VERSION): $(BIN)
 
 $(BIN): $(SRC_DIR) $(SRC_DIR)/.config $(SRC_DIR)/filter_exit.patch
 	cd $(SRC_DIR) && patch -Np1 < filter_exit.patch
-	make -j $(shell nproc) -C $< ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- SOURCE_DATE_EPOCH=0 "CFLAGS=$(CFLAGS)" "LDFLAGS=$(LDFLAGS)" busybox
+	make -j $(shell nproc) -C $< ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- "CFLAGS=$(CFLAGS)" "LDFLAGS=$(LDFLAGS)" busybox
 
 $(SRC_DIR)/.config: config
 	cp $< $@
