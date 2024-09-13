@@ -72,12 +72,13 @@ RUN make -j2 VERSION=0.8.27
 
 ###############################################################################
 
-FROM cryptobughunters/rust:main AS rust-builder
+FROM cryptobughunters/rust:2.2.0 AS rust-builder
 WORKDIR /opt/build
 
 ###############################################################################
 
 FROM rust-builder AS reth-builder
+ENV MDBX_BUILD_TIMESTAMP=unknown
 COPY reth/Makefile .
 
 FROM reth-builder AS reth-1.0.5-builder
