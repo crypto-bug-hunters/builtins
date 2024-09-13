@@ -77,6 +77,7 @@ WORKDIR /opt/build
 ###############################################################################
 
 FROM rust-builder AS reth-builder
+ENV MDBX_BUILD_TIMESTAMP=unknown
 COPY reth/Makefile .
 
 FROM reth-builder AS reth-1.0.5-builder
