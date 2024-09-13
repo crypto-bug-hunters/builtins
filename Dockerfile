@@ -1,5 +1,6 @@
 FROM ubuntu:noble-20240801 AS base-builder
 WORKDIR /opt/build
+ENV SOURCE_DATE_EPOCH=0
 ARG DEBIAN_FRONTEND=noninteractive
 RUN <<EOF
 set -eu
