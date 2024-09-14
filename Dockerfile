@@ -77,6 +77,14 @@ WORKDIR /opt/build
 
 ###############################################################################
 
+FROM rust-builder AS forge-builder
+COPY forge/Makefile .
+
+FROM forge-builder AS forge-2cdbfac-builder
+RUN make COMMIT_SHA=2cdbfaca634b284084d0f86357623aef7a0d2ce3
+
+###############################################################################
+
 FROM rust-builder AS reth-builder
 ENV MDBX_BUILD_TIMESTAMP=unknown
 COPY reth/Makefile .
@@ -94,6 +102,7 @@ COPY --from=busybox-1.36.1-builder --chmod=755 /opt/build/busybox-1.36.1 .
 COPY --from=sqlite-3.32.2-builder --chmod=755 /opt/build/sqlite-3.32.2 .
 COPY --from=sqlite-3.43.2-builder --chmod=755 /opt/build/sqlite-3.43.2 .
 COPY --from=solc-0.8.27-builder --chmod=755 /opt/build/solc-0.8.27 .
+COPY --from=forge-2cdbfac-builder --chmod=755 /opt/build/forge-2cdbfac .
 COPY --from=reth-1.0.5-builder --chmod=755 /opt/build/reth-1.0.5 .
 RUN tar --sort=name \
     --mtime=@0 \
