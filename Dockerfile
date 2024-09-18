@@ -70,7 +70,7 @@ RUN apt-get install -y --no-install-recommends cmake
 COPY solc/Makefile .
 
 FROM solc-builder AS solc-0.8.27-builder
-RUN make -j2 VERSION=0.8.27
+RUN make -j $(nproc) VERSION=0.8.27
 
 ###############################################################################
 
