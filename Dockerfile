@@ -1,4 +1,4 @@
-FROM ubuntu:noble-20240827.1 AS base-builder
+FROM --platform=$BUILDPLATFORM ubuntu:noble-20240827.1 AS base-builder
 WORKDIR /opt/build
 ENV SOURCE_DATE_EPOCH=0
 ARG DEBIAN_FRONTEND=noninteractive
@@ -94,7 +94,7 @@ RUN make VERSION=1.0.5
 
 ###############################################################################
 
-FROM base-builder AS bundler
+FROM --platform=$TARGETPLATFORM scratch
 WORKDIR /opt/bundle
 COPY --from=lua-5.4.3-builder --chmod=755 /opt/build/lua-5.4.3 .
 COPY --from=lua-5.4.7-builder --chmod=755 /opt/build/lua-5.4.7 .
@@ -104,8 +104,3 @@ COPY --from=sqlite-3.43.2-builder --chmod=755 /opt/build/sqlite-3.43.2 .
 COPY --from=solc-0.8.27-builder --chmod=755 /opt/build/solc-0.8.27 .
 COPY --from=forge-2cdbfac-builder --chmod=755 /opt/build/forge-2cdbfac .
 COPY --from=reth-1.0.5-builder --chmod=755 /opt/build/reth-1.0.5 .
-RUN tar --sort=name \
-    --mtime=@0 \
-    --owner=0 --group=0 --numeric-owner \
-    --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-    -czf builtins.tar.gz *
