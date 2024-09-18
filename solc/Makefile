@@ -18,7 +18,7 @@ CFLAGS=-O1 -ftrivial-auto-var-init=pattern -D_FORTIFY_SOURCE=2 -fPIE -fstack-cla
 CXXFLAGS=$(CFLAGS)
 LDFLAGS=-pie -Wl,-z,now,-z,relro,--gc-sections
 
-solc-$(VERSION): $(BIN)
+solc-$(VERSION)-linux-riscv64: $(BIN)
 	mv $< $@
 	rm -rf $(BOOST_SRC_TAR) $(BOOST_SRC_DIR) $(BOOST_INSTALLATION_DIR) $(BOOST_USER_CONFIG_FILE) $(SOLC_SRC_TAR) $(SOLC_SRC_DIR)
 	touch --date=@0 $@

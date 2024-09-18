@@ -10,7 +10,7 @@ HARDEN_LDFLAGS=-pie -Wl,-z,now,-z,relro,--gc-sections
 SQLITE_CFLAGS=-DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION
 SQLITE_LDFLAGS=-lm -s
 
-sqlite-$(VERSION): $(SRC_DIR)/sqlite3.c
+sqlite-$(VERSION)-linux-riscv64: $(SRC_DIR)/sqlite3.c
 	$(CC) -o $@ $(HARDEN_CFLAGS) $(SQLITE_CFLAGS) $(SRC_DIR)/shell.c $(SRC_DIR)/sqlite3.c $(HARDEN_LDFLAGS) $(SQLITE_LDFLAGS)
 	rm -rf $(SRC_TAR) $(SRC_DIR)
 	touch --date=@0 $@

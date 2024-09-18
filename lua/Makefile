@@ -9,7 +9,7 @@ RANLIB=riscv64-linux-gnu-ranlib
 MYCFLAGS=-O1 -ftrivial-auto-var-init=pattern -D_FORTIFY_SOURCE=2 -fexceptions -fPIE -fstack-clash-protection -fstack-protector-strong -ffunction-sections -fdata-sections
 MYLDFLAGS=-pie -Wl,-z,now,-z,relro,--gc-sections -s
 
-lua-$(VERSION): $(BIN)
+lua-$(VERSION)-linux-riscv64: $(BIN)
 	mv $< $@
 	rm -rf $(DEST_DIR) $(SRC_TAR)
 	touch --date=@0 $@

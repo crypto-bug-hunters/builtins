@@ -6,7 +6,7 @@ BIN=$(SRC_DIR)/busybox
 CFLAGS=-O1 -ftrivial-auto-var-init=pattern -D_FORTIFY_SOURCE=2 -fexceptions -fPIE -fstack-clash-protection -fstack-protector-strong -ffunction-sections -fdata-sections
 LDFLAGS=-pie -Wl,-z,now,-z,relro,--gc-sections -s
 
-busybox-$(VERSION): $(BIN)
+busybox-$(VERSION)-linux-riscv64: $(BIN)
 	mv $< $@
 	rm -rf $(DEST_DIR) $(SRC_TAR)
 	touch --date=@0 $@

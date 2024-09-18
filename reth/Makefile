@@ -2,7 +2,7 @@ SRC_DIR=reth-clone
 REF=v$(VERSION)
 BIN=$(SRC_DIR)/target/$(CARGO_TARGET)/release/reth
 
-reth-$(VERSION): $(BIN)
+reth-$(VERSION)-linux-riscv64: $(BIN)
 	mv $< $@
 	rm -rf $(SRC_DIR)
 	touch --date=@0 $@
