@@ -1,4 +1,6 @@
-FROM --platform=$BUILDPLATFORM ubuntu:noble-20240827.1 AS base-builder
+ARG UBUNTU_TAG=noble-20240827.1
+
+FROM --platform=$BUILDPLATFORM ubuntu:${UBUNTU_TAG} AS base-builder
 WORKDIR /opt/build
 ENV SOURCE_DATE_EPOCH=0
 ARG DEBIAN_FRONTEND=noninteractive
