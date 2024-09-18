@@ -72,7 +72,7 @@ RUN make -j2 VERSION=0.8.27
 
 ###############################################################################
 
-FROM cryptobughunters/rust:2.2.0 AS rust-builder
+FROM --platform=$BUILDPLATFORM cryptobughunters/rust:2.2.0 AS rust-builder
 WORKDIR /opt/build
 
 ###############################################################################
