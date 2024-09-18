@@ -51,24 +51,29 @@ jobs:
           builder: ${{ steps.setup_buildx.outputs.name }}
           tags: ${{ steps.extract_metadata.outputs.tags }}
           labels: ${{ steps.extract_metadata.outputs.labels }}
+          platforms: linux/riscv64
           annotations: ${{ steps.extract_metadata.outputs.annotations }}
           cache-from: type=gha,scope=ubuntu
           cache-to: type=gha,mode=max,scope=ubuntu
 
-      - name: Extract file from image
+      - name: Extract binaries from image
         if: startsWith(github.ref, 'refs/tags/v')
         uses: shrink/actions-docker-extract@v3
         with:
           image: ${{ steps.build_image.outputs.imageid }}
-          path: /opt/bundle/builtins.tar.gz
+          path: /opt/bundle/.
           destination: out
 
-      - name: Add version to file name
+      - name: Compute SHA-256 cheksums of binaries
         if: startsWith(github.ref, 'refs/tags/v')
         working-directory: out
-        run: mv builtins.tar.gz "builtins-${GITHUB_REF#refs/tags/v}.tar.gz"
+        run: |
+          for file in *
+          do
+            sha256sum -b "$file" > "$file.sha256sum"
+          done
 
-      - name: Upload file as release artifact
+      - name: Upload binaries as release artifacts
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:

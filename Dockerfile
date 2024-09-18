@@ -1,4 +1,6 @@
-FROM ubuntu:noble-20240801 AS base-builder
+ARG UBUNTU_TAG=noble-20240827.1
+
+FROM --platform=$BUILDPLATFORM ubuntu:${UBUNTU_TAG} AS base-builder
 WORKDIR /opt/build
 ENV SOURCE_DATE_EPOCH=0
 ARG DEBIAN_FRONTEND=noninteractive
@@ -6,7 +8,8 @@ RUN <<EOF
 set -eu
 apt-get update
 apt install -y --no-install-recommends ca-certificates
-apt update --snapshot=20240801T030400Z
+apt update --snapshot=20240827T030400Z
+apt install -y --no-install-recommends curl
 EOF
 
 ###############################################################################
@@ -16,8 +19,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y --no-install-recommends \
     build-essential \
     gcc-riscv64-linux-gnu \
-    libc-dev-riscv64-cross \
-    wget
+    libc-dev-riscv64-cross
 
 ###############################################################################
 
@@ -68,11 +70,11 @@ RUN apt-get install -y --no-install-recommends cmake
 COPY solc/Makefile .
 
 FROM solc-builder AS solc-0.8.27-builder
-RUN make -j2 VERSION=0.8.27
+RUN make -j $(nproc) VERSION=0.8.27
 
 ###############################################################################
 
-FROM cryptobughunters/rust:2.2.0 AS rust-builder
+FROM --platform=$BUILDPLATFORM cryptobughunters/rust:2.2.0 AS rust-builder
 WORKDIR /opt/build
 
 ###############################################################################
@@ -94,18 +96,13 @@ RUN make VERSION=1.0.5
 
 ###############################################################################
 
-FROM ubuntu:noble-20240801 AS bundler
+FROM ubuntu:${UBUNTU_TAG}
 WORKDIR /opt/bundle
-COPY --from=lua-5.4.3-builder --chmod=755 /opt/build/lua-5.4.3 .
-COPY --from=lua-5.4.7-builder --chmod=755 /opt/build/lua-5.4.7 .
-COPY --from=busybox-1.36.1-builder --chmod=755 /opt/build/busybox-1.36.1 .
-COPY --from=sqlite-3.32.2-builder --chmod=755 /opt/build/sqlite-3.32.2 .
-COPY --from=sqlite-3.43.2-builder --chmod=755 /opt/build/sqlite-3.43.2 .
-COPY --from=solc-0.8.27-builder --chmod=755 /opt/build/solc-0.8.27 .
-COPY --from=forge-2cdbfac-builder --chmod=755 /opt/build/forge-2cdbfac .
-COPY --from=reth-1.0.5-builder --chmod=755 /opt/build/reth-1.0.5 .
-RUN tar --sort=name \
-    --mtime=@0 \
-    --owner=0 --group=0 --numeric-owner \
-    --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-    -czf builtins.tar.gz *
+COPY --from=lua-5.4.3-builder --chmod=755 /opt/build/lua-5.4.3-linux-riscv64 .
+COPY --from=lua-5.4.7-builder --chmod=755 /opt/build/lua-5.4.7-linux-riscv64 .
+COPY --from=busybox-1.36.1-builder --chmod=755 /opt/build/busybox-1.36.1-linux-riscv64 .
+COPY --from=sqlite-3.32.2-builder --chmod=755 /opt/build/sqlite-3.32.2-linux-riscv64 .
+COPY --from=sqlite-3.43.2-builder --chmod=755 /opt/build/sqlite-3.43.2-linux-riscv64 .
+COPY --from=solc-0.8.27-builder --chmod=755 /opt/build/solc-0.8.27-linux-riscv64 .
+COPY --from=forge-2cdbfac-builder --chmod=755 /opt/build/forge-2cdbfac-linux-riscv64 .
+COPY --from=reth-1.0.5-builder --chmod=755 /opt/build/reth-1.0.5-linux-riscv64 .
