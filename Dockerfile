@@ -7,6 +7,7 @@ set -eu
 apt-get update
 apt install -y --no-install-recommends ca-certificates
 apt update --snapshot=20240827T030400Z
+apt install -y --no-install-recommends curl
 EOF
 
 ###############################################################################
@@ -16,8 +17,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y --no-install-recommends \
     build-essential \
     gcc-riscv64-linux-gnu \
-    libc-dev-riscv64-cross \
-    wget
+    libc-dev-riscv64-cross
 
 ###############################################################################
 

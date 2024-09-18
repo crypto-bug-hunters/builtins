@@ -21,4 +21,4 @@ $(SRC_DIR): $(SRC_TAR)
 	tar xf $< -C $(DEST_DIR)
 
 $(SRC_TAR):
-	wget https://www.lua.org/ftp/$@
+	curl -fsSL -O https://www.lua.org/ftp/$@

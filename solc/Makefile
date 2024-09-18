@@ -42,7 +42,7 @@ $(SOLC_SRC_DIR): $(SOLC_SRC_TAR)
 	tar xf $<
 
 $(SOLC_SRC_TAR):
-	wget -O $@ https://github.com/ethereum/solidity/releases/download/v$(VERSION)/$@
+	curl -fsSL -O https://github.com/ethereum/solidity/releases/download/v$(VERSION)/$@
 
 $(BOOST_INSTALLATION_DIR): $(BOOST_SRC_DIR) $(BOOST_USER_CONFIG_FILE)
 	mkdir -p $@
@@ -57,4 +57,4 @@ $(BOOST_SRC_DIR): $(BOOST_SRC_TAR)
 	tar xf $<
 
 $(BOOST_SRC_TAR):
-	wget https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source/$@
+	curl -fsSL -O https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source/$@

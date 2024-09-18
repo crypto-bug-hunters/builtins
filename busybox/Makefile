@@ -25,4 +25,4 @@ $(SRC_DIR): $(SRC_TAR)
 	tar xf $< -C $(DEST_DIR)
 
 $(SRC_TAR):
-	wget https://busybox.net/downloads/$(SRC_TAR)
+	curl -fsSL -O https://busybox.net/downloads/$(SRC_TAR)

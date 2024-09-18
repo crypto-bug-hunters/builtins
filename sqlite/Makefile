@@ -14,7 +14,7 @@ sqlite-$(VERSION): $(SRC_DIR)/sqlite3.c
 	$(CC) -o $@ $(HARDEN_CFLAGS) $(SQLITE_CFLAGS) $(SRC_DIR)/shell.c $(SRC_DIR)/sqlite3.c $(HARDEN_LDFLAGS) $(SQLITE_LDFLAGS)
 	rm -rf $(SRC_TAR) $(SRC_DIR)
 
-$(SRC_DIR)/sqlite3.c: $(SRC_DIR) 
+$(SRC_DIR)/sqlite3.c: $(SRC_DIR)
 	cd $< && ./configure --host=$(HOST)
 	make -C $< sqlite3.c
 
@@ -22,4 +22,4 @@ $(SRC_DIR): $(SRC_TAR)
 	tar xf $<
 
 $(SRC_TAR):
-	wget -O $@ https://github.com/sqlite/sqlite/archive/refs/tags/version-$(VERSION).tar.gz
+	curl -fsSL -o $@ https://github.com/sqlite/sqlite/archive/refs/tags/version-$(VERSION).tar.gz
