@@ -55,3 +55,17 @@ jobs:
           annotations: ${{ steps.extract_metadata.outputs.annotations }}
           cache-from: type=gha,scope=ubuntu
           cache-to: type=gha,mode=max,scope=ubuntu
+
+      - name: Extract binaries from image
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: shrink/actions-docker-extract@v3
+        with:
+          image: ${{ steps.build_image.outputs.imageid }}
+          path: /opt/bundle/.
+          destination: out
+
+      - name: Upload binaries as release artifacts
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*
