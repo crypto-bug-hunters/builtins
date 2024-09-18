@@ -1,4 +1,4 @@
-FROM ubuntu:noble-20240801 AS base-builder
+FROM ubuntu:noble-20240827.1 AS base-builder
 WORKDIR /opt/build
 ENV SOURCE_DATE_EPOCH=0
 ARG DEBIAN_FRONTEND=noninteractive
@@ -6,7 +6,7 @@ RUN <<EOF
 set -eu
 apt-get update
 apt install -y --no-install-recommends ca-certificates
-apt update --snapshot=20240801T030400Z
+apt update --snapshot=20240827T030400Z
 EOF
 
 ###############################################################################
@@ -94,7 +94,7 @@ RUN make VERSION=1.0.5
 
 ###############################################################################
 
-FROM ubuntu:noble-20240801 AS bundler
+FROM base-builder AS bundler
 WORKDIR /opt/bundle
 COPY --from=lua-5.4.3-builder --chmod=755 /opt/build/lua-5.4.3 .
 COPY --from=lua-5.4.7-builder --chmod=755 /opt/build/lua-5.4.7 .
