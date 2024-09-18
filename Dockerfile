@@ -94,7 +94,7 @@ RUN make VERSION=1.0.5
 
 ###############################################################################
 
-FROM --platform=$TARGETPLATFORM scratch
+FROM scratch
 WORKDIR /opt/bundle
 COPY --from=lua-5.4.3-builder --chmod=755 /opt/build/lua-5.4.3 .
 COPY --from=lua-5.4.7-builder --chmod=755 /opt/build/lua-5.4.7 .
