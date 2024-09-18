@@ -64,6 +64,15 @@ jobs:
           path: /opt/bundle/.
           destination: out
 
+      - name: Compute SHA-256 cheksums of binaries
+        if: startsWith(github.ref, 'refs/tags/v')
+        working-directory: out
+        run: |
+          for file in *
+          do
+            sha256sum -b "$file" > "$file.sha256sum"
+          done
+
       - name: Upload binaries as release artifacts
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
