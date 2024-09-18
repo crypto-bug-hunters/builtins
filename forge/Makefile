@@ -6,6 +6,7 @@ BIN=$(SRC_DIR)/target/$(CARGO_TARGET)/release/forge
 forge-$(COMMIT_SHA_SHORT): $(BIN)
 	mv $< $@
 	rm -rf $(SRC_DIR)
+	touch --date=@0 $@
 
 $(BIN): $(SRC_DIR)
 	cargo build --manifest-path $(SRC_DIR)/Cargo.toml --target $(CARGO_TARGET) --release --bin forge

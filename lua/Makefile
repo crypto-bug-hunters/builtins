@@ -12,6 +12,7 @@ MYLDFLAGS=-pie -Wl,-z,now,-z,relro,--gc-sections -s
 lua-$(VERSION): $(BIN)
 	mv $< $@
 	rm -rf $(DEST_DIR) $(SRC_TAR)
+	touch --date=@0 $@
 
 $(BIN): $(SRC_DIR)
 	make -j $(shell nproc) -C $< "CC=$(CC)" "AR=$(AR)" "RANLIB=$(RANLIB)" "MYCFLAGS=$(MYCFLAGS)" "MYLDFLAGS=$(MYLDFLAGS)" linux

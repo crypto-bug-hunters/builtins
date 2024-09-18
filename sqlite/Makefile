@@ -13,6 +13,7 @@ SQLITE_LDFLAGS=-lm -s
 sqlite-$(VERSION): $(SRC_DIR)/sqlite3.c
 	$(CC) -o $@ $(HARDEN_CFLAGS) $(SQLITE_CFLAGS) $(SRC_DIR)/shell.c $(SRC_DIR)/sqlite3.c $(HARDEN_LDFLAGS) $(SQLITE_LDFLAGS)
 	rm -rf $(SRC_TAR) $(SRC_DIR)
+	touch --date=@0 $@
 
 $(SRC_DIR)/sqlite3.c: $(SRC_DIR)
 	cd $< && ./configure --host=$(HOST)

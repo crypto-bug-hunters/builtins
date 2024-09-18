@@ -21,6 +21,7 @@ LDFLAGS=-pie -Wl,-z,now,-z,relro,--gc-sections
 solc-$(VERSION): $(BIN)
 	mv $< $@
 	rm -rf $(BOOST_SRC_TAR) $(BOOST_SRC_DIR) $(BOOST_INSTALLATION_DIR) $(BOOST_USER_CONFIG_FILE) $(SOLC_SRC_TAR) $(SOLC_SRC_DIR)
+	touch --date=@0 $@
 
 $(BIN): $(SOLC_BUILD_DIR)
 	make -C $< solc -j $(shell nproc)

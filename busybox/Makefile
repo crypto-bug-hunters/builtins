@@ -9,6 +9,7 @@ LDFLAGS=-pie -Wl,-z,now,-z,relro,--gc-sections -s
 busybox-$(VERSION): $(BIN)
 	mv $< $@
 	rm -rf $(DEST_DIR) $(SRC_TAR)
+	touch --date=@0 $@
 
 $(BIN): $(SRC_DIR) $(SRC_DIR)/.config $(SRC_DIR)/filter_exit.patch
 	cd $(SRC_DIR) && patch -Np1 < filter_exit.patch
