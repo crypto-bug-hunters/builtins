@@ -104,9 +104,8 @@ ARG CHISEL_VERSION=0.10.0
 ADD "https://github.com/canonical/chisel/releases/download/v${CHISEL_VERSION}/chisel_v${CHISEL_VERSION}_linux_riscv64.tar.gz" chisel.tar.gz
 RUN tar -xvf chisel.tar.gz -C /usr/bin/
 
-ADD "https://github.com/cartesi/chisel-releases.git#ubuntu-24.04-riscv64" /chisel-24.04
 RUN chisel cut \
-    --release /chisel-24.04 \
+    --release ubuntu-24.04 \
     --root /rootfs \
     --arch=riscv64 \
     libstdc++6_libs \
