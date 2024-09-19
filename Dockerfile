@@ -44,7 +44,7 @@ RUN make VERSION=5.4.7
 FROM c-builder AS busybox-builder
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y --no-install-recommends bzip2 patch
-COPY busybox/Makefile busybox/config busybox/filter_exit.patch .
+COPY busybox/Makefile busybox/config busybox/filter_exit.patch ./
 
 FROM busybox-builder AS busybox-1.36.1-builder
 RUN make VERSION=1.36.1
@@ -96,7 +96,24 @@ RUN make VERSION=1.0.5
 
 ###############################################################################
 
-FROM ubuntu:${UBUNTU_TAG}
+FROM base-builder AS chiselled-builder
+WORKDIR /rootfs
+
+# Get chisel binary
+ARG CHISEL_VERSION=0.10.0
+ADD "https://github.com/canonical/chisel/releases/download/v${CHISEL_VERSION}/chisel_v${CHISEL_VERSION}_linux_riscv64.tar.gz" /tmp/chisel.tar.gz
+RUN tar -xvf /tmp/chisel.tar.gz -C /usr/bin/
+
+RUN chisel cut \
+    --release ubuntu-24.04 \
+    --root /rootfs \
+    --arch=riscv64 \
+    libstdc++6_libs \
+    libatomic1_libs
+
+###############################################################################
+
+FROM scratch
 WORKDIR /opt/bundle
 COPY --from=lua-5.4.3-builder --chmod=755 /opt/build/lua-5.4.3-linux-riscv64 .
 COPY --from=lua-5.4.7-builder --chmod=755 /opt/build/lua-5.4.7-linux-riscv64 .
@@ -106,3 +123,4 @@ COPY --from=sqlite-3.43.2-builder --chmod=755 /opt/build/sqlite-3.43.2-linux-ris
 COPY --from=solc-0.8.27-builder --chmod=755 /opt/build/solc-0.8.27-linux-riscv64 .
 COPY --from=forge-2cdbfac-builder --chmod=755 /opt/build/forge-2cdbfac-linux-riscv64 .
 COPY --from=reth-1.0.5-builder --chmod=755 /opt/build/reth-1.0.5-linux-riscv64 .
+COPY --from=chiselled-builder /rootfs /
