@@ -96,7 +96,7 @@ RUN make VERSION=1.0.5
 
 ###############################################################################
 
-FROM ubuntu:${UBUNTU_TAG} AS chiselled-builder
+FROM base-builder AS chiselled-builder
 WORKDIR /rootfs
 
 # Get chisel binary
