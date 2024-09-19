@@ -109,7 +109,7 @@ RUN chisel cut \
     --release /chisel-24.04 \
     --root /rootfs \
     --arch=riscv64 \
-    libgcc-s1_libs \
+    libstdc++6_libs \
     libatomic1_libs
 
 ###############################################################################
