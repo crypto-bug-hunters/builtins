@@ -79,11 +79,11 @@ WORKDIR /opt/build
 
 ###############################################################################
 
-FROM rust-builder AS forge-builder
-COPY forge/Makefile .
+FROM rust-builder AS foundry-builder
+COPY foundry/Makefile .
 
-FROM forge-builder AS forge-2cdbfac-builder
-RUN make COMMIT_SHA=2cdbfaca634b284084d0f86357623aef7a0d2ce3
+FROM foundry-builder AS foundry-2cdbfac-builder
+RUN make all clean COMMIT_SHA=2cdbfaca634b284084d0f86357623aef7a0d2ce3
 
 ###############################################################################
 
@@ -121,6 +121,7 @@ COPY --from=busybox-1.36.1-builder --chmod=755 /opt/build/busybox-1.36.1-linux-r
 COPY --from=sqlite-3.32.2-builder --chmod=755 /opt/build/sqlite-3.32.2-linux-riscv64 .
 COPY --from=sqlite-3.43.2-builder --chmod=755 /opt/build/sqlite-3.43.2-linux-riscv64 .
 COPY --from=solc-0.8.27-builder --chmod=755 /opt/build/solc-0.8.27-linux-riscv64 .
-COPY --from=forge-2cdbfac-builder --chmod=755 /opt/build/forge-2cdbfac-linux-riscv64 .
+COPY --from=foundry-2cdbfac-builder --chmod=755 /opt/build/cast-2cdbfac-linux-riscv64 .
+COPY --from=foundry-2cdbfac-builder --chmod=755 /opt/build/forge-2cdbfac-linux-riscv64 .
 COPY --from=reth-1.0.5-builder --chmod=755 /opt/build/reth-1.0.5-linux-riscv64 .
 COPY --from=chiselled-builder /rootfs /
