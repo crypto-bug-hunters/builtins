@@ -1,4 +1,4 @@
-ARG UBUNTU_TAG=noble-20240827.1
+ARG UBUNTU_TAG=noble-20241009
 
 FROM --platform=$BUILDPLATFORM ubuntu:${UBUNTU_TAG} AS base-builder
 WORKDIR /opt/build
@@ -8,7 +8,7 @@ RUN <<EOF
 set -eu
 apt-get update
 apt install -y --no-install-recommends ca-certificates
-apt update --snapshot=20240827T030400Z
+apt update --snapshot=20241010T030400Z
 apt install -y --no-install-recommends curl
 EOF
 
