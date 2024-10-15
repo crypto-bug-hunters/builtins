@@ -100,7 +100,7 @@ FROM base-builder AS chiselled-builder
 WORKDIR /rootfs
 
 # Get chisel binary
-ARG CHISEL_VERSION=0.10.0
+ARG CHISEL_VERSION=1.0.0
 ADD "https://github.com/canonical/chisel/releases/download/v${CHISEL_VERSION}/chisel_v${CHISEL_VERSION}_linux_riscv64.tar.gz" /tmp/chisel.tar.gz
 RUN tar -xvf /tmp/chisel.tar.gz -C /usr/bin/
 
@@ -108,6 +108,7 @@ RUN chisel cut \
     --release ubuntu-24.04 \
     --root /rootfs \
     --arch=riscv64 \
+    base-files_chisel \
     busybox_bins \
     libstdc++6_libs \
     libatomic1_libs
