@@ -1,0 +1,32 @@
+diff --git a/crates/storage/db/src/implementation/mdbx/mod.rs b/crates/storage/db/src/implementation/mdbx/mod.rs
+index cc9f055e9..815af5060 100644
+--- a/crates/storage/db/src/implementation/mdbx/mod.rs
++++ b/crates/storage/db/src/implementation/mdbx/mod.rs
+@@ -33,8 +33,10 @@ use tx::Tx;
+ pub mod cursor;
+ pub mod tx;
+ 
+-const GIGABYTE: usize = 1024 * 1024 * 1024;
+-const TERABYTE: usize = GIGABYTE * 1024;
++const KILOBYTE: usize = 1024;
++const MEGABYTE: usize = 1024 * KILOBYTE;
++const GIGABYTE: usize = 1024 * MEGABYTE;
++const TERABYTE: usize = 1024 * GIGABYTE;
+ 
+ /// MDBX allows up to 32767 readers (`MDBX_READERS_LIMIT`), but we limit it to slightly below that
+ const DEFAULT_MAX_READERS: u64 = 32_000;
+@@ -280,10 +282,10 @@ impl DatabaseEnv {
+         debug_assert!(Tables::ALL.len() <= 256, "number of tables exceed max dbs");
+         inner_env.set_max_dbs(256);
+         inner_env.set_geometry(Geometry {
+-            // Maximum database size of 4 terabytes
+-            size: Some(0..(4 * TERABYTE)),
+-            // We grow the database in increments of 4 gigabytes
+-            growth_step: Some(4 * GIGABYTE as isize),
++            // Maximum database size of 4 megabytes
++            size: Some(0..(4 * MEGABYTE)),
++            // We grow the database in increments of 4 kilobytes
++            growth_step: Some(4 * KILOBYTE as isize),
+             // The database never shrinks
+             shrink_threshold: Some(0),
+             page_size: Some(PageSize::Set(default_page_size())),
