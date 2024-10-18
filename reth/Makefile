@@ -7,8 +7,12 @@ reth-$(VERSION)-linux-riscv64: $(BIN)
 	rm -rf $(SRC_DIR)
 	touch --date=@0 $@
 
-$(BIN): $(SRC_DIR)
+$(BIN): $(SRC_DIR) $(SRC_DIR)/custom_mdbx_geometry.patch
+	cd $(SRC_DIR) && patch -Np1 < custom_mdbx_geometry.patch
 	cargo build --manifest-path $(SRC_DIR)/Cargo.toml --target $(CARGO_TARGET) --release --bin reth
+
+$(SRC_DIR)/%.patch: %.patch
+	cp $< $@
 
 $(SRC_DIR):
 	git clone -b $(REF) https://github.com/paradigmxyz/reth $@

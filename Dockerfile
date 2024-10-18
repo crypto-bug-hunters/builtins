@@ -89,7 +89,7 @@ RUN make all clean COMMIT_SHA=2cdbfaca634b284084d0f86357623aef7a0d2ce3
 
 FROM rust-builder AS reth-builder
 ENV MDBX_BUILD_TIMESTAMP=unknown
-COPY reth/Makefile .
+COPY reth/Makefile reth/custom_mdbx_geometry.patch .
 
 FROM reth-builder AS reth-1.0.5-builder
 RUN make VERSION=1.0.5
