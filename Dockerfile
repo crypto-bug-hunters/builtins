@@ -69,8 +69,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y --no-install-recommends cmake
 COPY solc/Makefile .
 
-FROM solc-builder AS solc-0.8.27-builder
-RUN make -j $(nproc) VERSION=0.8.27
+FROM solc-builder AS solc-0.8.28-builder
+RUN make -j $(nproc) VERSION=0.8.28
 
 ###############################################################################
 
@@ -122,7 +122,7 @@ COPY --from=lua-5.4.7-builder --chmod=755 /opt/build/lua-5.4.7-linux-riscv64 .
 COPY --from=busybox-1.36.1-builder --chmod=755 /opt/build/busybox-1.36.1-linux-riscv64 .
 COPY --from=sqlite-3.32.2-builder --chmod=755 /opt/build/sqlite-3.32.2-linux-riscv64 .
 COPY --from=sqlite-3.43.2-builder --chmod=755 /opt/build/sqlite-3.43.2-linux-riscv64 .
-COPY --from=solc-0.8.27-builder --chmod=755 /opt/build/solc-0.8.27-linux-riscv64 .
+COPY --from=solc-0.8.28-builder --chmod=755 /opt/build/solc-0.8.28-linux-riscv64 .
 COPY --from=foundry-2cdbfac-builder --chmod=755 /opt/build/cast-2cdbfac-linux-riscv64 .
 COPY --from=foundry-2cdbfac-builder --chmod=755 /opt/build/forge-2cdbfac-linux-riscv64 .
 COPY --from=reth-1.0.5-builder --chmod=755 /opt/build/reth-1.0.5-linux-riscv64 .
