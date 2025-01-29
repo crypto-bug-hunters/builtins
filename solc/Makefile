@@ -58,4 +58,4 @@ $(BOOST_SRC_DIR): $(BOOST_SRC_TAR)
 	tar xf $<
 
 $(BOOST_SRC_TAR):
-	curl -fsSL -O https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source/$@
+	curl -fsSL -O https://archives.boost.io/release/$(BOOST_VERSION)/source/$@
